@@ -1,3 +1,5 @@
+DROP TABLE users, services, staff;
+
 CREATE TABLE users(
   id serial,
   first_name character varying(50),
@@ -19,6 +21,29 @@ CREATE TABLE services(
   price int,
   time int
 );
+
+CREATE TABLE staff(
+  id serial,
+  userID int,
+  stylist boolean,
+  barber boolean,
+  staffPicture character varying(200)
+);
+
+INSERT INTO staff(userID, stylist, barber, staffPicture)
+VALUES
+(1, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg'),
+(2, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/riawna.jpg'),
+(3, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/nikki.jpg'),
+(4, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/morgan.jpg'),
+(5, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/mae.jpg'),
+(6, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/florido.jpg'),
+(7, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg'),
+(8, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/riawna.jpg'),
+(9, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/nikki.jpg'),
+(10, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/morgan.jpg'),
+(11, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/mae.jpg'),
+(12, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/florido.jpg');
 
 INSERT INTO services(type, category, name, description, price, time)
 VALUES
@@ -43,6 +68,17 @@ VALUES
 
 INSERT INTO users(first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer)
 VALUES
-('Owner','User','owner@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', true,  false, false),
-('Staff','User','staff@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
-('Customer','User','customer@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, false, true);
+('Brooke','Bellenger','brooke@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Patrick','Bullion','patrick@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Mallory','Petry','mallory@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Michelle','Vincent','michelle@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Jonathan','Meier','jonathan@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Oscar','Mirand','oscar@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Hogan','Alcorn','hogan@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Mark','Twaddell','mark@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Doug','Sartin','doug@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Jason','Vrendenburg','jason@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Jake','Smith','jake@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Eddie','Capistran','eddie@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
+('Customer','User','customer@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, false, true),
+('Owner','User','owner@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', true,  false, false);
