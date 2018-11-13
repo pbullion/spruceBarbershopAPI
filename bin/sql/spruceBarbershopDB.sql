@@ -30,6 +30,41 @@ CREATE TABLE staff(
   staffPicture character varying(200)
 );
 
+CREATE TABLE business_hours(
+  id serial,
+  day character varying(50),
+  hours character varying(50)
+);
+
+CREATE TABLE specials(
+  id serial,
+  type character varying(50),
+  special character varying(50)
+);
+
+CREATE TABLE updates(
+  id serial,
+  update character varying(200)
+);
+
+INSERT INTO specials(type, special)
+VALUES
+('Military/Veteran', '$5 off all services'),
+('First Responders', '$5 off all services'),
+('Police/Fire Fighter', '$5 off all services'),
+('Senior Citizen', '$5 off all services'),
+('Thirsty Thursday', '10 am - 2 pm $5 off all services');
+
+INSERT INTO business_hours(day, hours)
+VALUES
+('Sunday', 'Closed'),
+('Monday', 'Closed'),
+('Tuesday', '10 am - 8 pm'),
+('Wednesday', '10 am - 8 pm'),
+('Thursday', '10 am - 8 pm'),
+('Friday', '10 am - 8 pm'),
+('Saturday', '10 am - 4 pm');
+
 INSERT INTO staff(userID, stylist, barber, staffPicture)
 VALUES
 (1, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg'),
