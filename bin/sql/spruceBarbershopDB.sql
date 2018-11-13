@@ -1,4 +1,4 @@
-DROP TABLE users, services, staff;
+DROP TABLE users, services, staff, business_hours, specials, updates;
 
 CREATE TABLE users(
   id serial,
@@ -39,6 +39,7 @@ CREATE TABLE business_hours(
 CREATE TABLE specials(
   id serial,
   type character varying(50),
+  type_line2 character varying(50),
   special character varying(50)
 );
 
@@ -47,13 +48,13 @@ CREATE TABLE updates(
   update character varying(200)
 );
 
-INSERT INTO specials(type, special)
+INSERT INTO specials(type, type_line2, special)
 VALUES
-('Military/Veteran', '$5 off all services'),
-('First Responders', '$5 off all services'),
-('Police/Fire Fighter', '$5 off all services'),
-('Senior Citizen', '$5 off all services'),
-('Thirsty Thursday', '10 am - 2 pm $5 off all services');
+('Military/Veteran', null, '$5 off all services'),
+('First Responders', null, '$5 off all services'),
+('Police/Fire Fighter', null, '$5 off all services'),
+('Senior Citizen', null, '$5 off all services'),
+('Thirsty Thursday', '10 am - 2 pm', '$5 off all services');
 
 INSERT INTO business_hours(day, hours)
 VALUES
