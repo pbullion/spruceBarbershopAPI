@@ -1,4 +1,17 @@
-DROP TABLE users, services, staff, business_hours, specials, updates;
+DROP TABLE users, services, staff, business_hours, specials, updates, waitlist;
+
+CREATE TABLE waitlist(
+  id serial,
+  userID int,
+  serviceID int,
+  staffID int,
+  staffName character varying(50),
+  in_progress boolean,
+  date DATE DEFAULT CURRENT_DATE,
+  join_time TIME WITH TIME ZONE DEFAULT CURRENT_TIME,
+  start_time TIME WITH TIME ZONE,
+  end_time TIME WITH TIME ZONE
+);
 
 CREATE TABLE users(
   id serial,
@@ -55,6 +68,22 @@ VALUES
 ('Police/Fire Fighter', null, '$5 off all services'),
 ('Senior Citizen', null, '$5 off all services'),
 ('Thirsty Thursday', '10 am - 2 pm', '$5 off all services');
+
+INSERT INTO waitlist(userID, serviceID, staffID, staffName)
+VALUES
+(17, 3, 4, 'Ashley'),
+(16, 4, null, 'Mallory'),
+(17, 6, null, 'Michelle'),
+(15, 5, 7, null),
+(18, 4, null, 'Michelle'),
+(15, 3, 4, null),
+(18, 5, 7, 'Brooke'),
+(15, 3, 4, 'Brooke'),
+(16, 6, null, null),
+(15, 4, null, 'Ashley'),
+(16, 5, 7, null),
+(17, 6, null, null),
+(18, 4, 5, null);
 
 INSERT INTO business_hours(day, hours)
 VALUES
@@ -117,4 +146,8 @@ VALUES
 ('Jake','Smith','jake@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
 ('Eddie','Capistran','eddie@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, true, false),
 ('Customer','User','customer@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false, false, true),
-('Owner','User','owner@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', true,  false, false);
+('Owner','User','owner@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', true,  false, false),
+('Oscar','Miranda','testing@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false,  false, true),
+('Jonathan','Meier','anotheremail@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false,  false, true),
+('Doug','Sartin','douglas@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false,  false, true),
+('Dustin','Williams','doover@gmail.com','4093443814', 'https://lh3.googleusercontent.com/-5iIqTS4qU_o/AAAAAAAAAAI/AAAAAAAAAIw/UugE0cC2NHI/photo.jpg', false,  false, true);
