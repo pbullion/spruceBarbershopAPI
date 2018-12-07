@@ -5,9 +5,45 @@ var moment = require('moment');
 const router = Router();
 
 router.get('/', (request, response, next) => {
-    pool.query('SELECT * FROM waitlist LEFT JOIN users ON users.id = waitlist.userid LEFT JOIN staff ON waitlist.staffid = staff.userid LEFT JOIN services on waitlist.serviceid = services.id', (err, res) => {
+    const todaysDate = moment().format('L');
+    pool.query('select *, u_staff.first_name staff_first_name, u_staff.last_name staff_last_name, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services s on w.serviceid=s.id left  join staff on w.staffid=staff.id left join users u_staff on staff.userid=u_staff.id WHERE date = $1 AND waiting = true', [todaysDate], (err, res) => {
         if (err) return next(err);
         response.json(res.rows);
+    });
+});
+
+router.get('/inProgressList', (request, response, next) => {
+    const todaysDate = moment().format('L');
+    pool.query('SELECT * FROM waitlist LEFT JOIN users ON users.id = waitlist.userid LEFT JOIN staff ON waitlist.staffid = staff.userid LEFT JOIN services on waitlist.serviceid = services.id WHERE date = $1 AND in_progress = true', [todaysDate], (err, res) => {
+        if (err) return next(err);
+        response.json(res.rows);
+    });
+});
+
+router.get('/overallTimeInProgress', (request, response, next) => {
+    const todaysDate = moment().format('L');
+    pool.query('SELECT * FROM waitlist left JOIN users ON users.id = waitlist.userid left join staff ON waitlist.staffid = staff.userid left join services on waitlist.serviceid = services.id where in_progress = true AND date = $1', [todaysDate], (err, res) => {
+        if (err) return next(err);
+        let i;
+        let totalLeftInProgress = 0;
+        for (i = 0; i < res.rows.length; i++) {
+            let time = parseInt(moment(res.rows[i].start_time, "h:mm").fromNow(true), 10);
+            if (!time) {
+                time = 1;
+            }
+            let serviceTime = res.rows[i].time;
+            let remainingTime = serviceTime - time;
+            totalLeftInProgress += remainingTime;
+        }
+        response.json(totalLeftInProgress);
+    });
+});
+
+router.get('/overallTimeInWaiting', (request, response, next) => {
+    const todaysDate = moment().format('L');
+    pool.query('SELECT SUM (time) as waitlisttime FROM waitlist left JOIN users ON users.id = waitlist.userid left join staff ON waitlist.staffid = staff.userid left join services on waitlist.serviceid = services.id where waiting = true AND date = $1', [todaysDate], (err, res) => {
+        if (err) return next(err);
+        response.json(parseInt(res.rows[0].waitlisttime, 10));
     });
 });
 
@@ -28,20 +64,44 @@ router.delete('/:id', (request, response, next) => {
 });
 
 router.post('/', (request, response, next) => {
+    const join_time = moment().format('h:mm a');
+    const todaysDate = moment().format('L');
+    console.log(request.body);
+    console.log(join_time);
+    console.log(todaysDate);
     pool.query(
-        'INSERT INTO waitlist(userid, serviceid, staffid, staffname) VALUES($1, $2, $3, $4)',
-        [request.body.currentUser.id, request.body.waitList.serviceID, request.body.waitList.staffMemberID, request.body.waitList.staffName],
+        'INSERT INTO waitlist(userid, serviceid, staffid, waiting, date, join_time) VALUES($1, $2, $3, $4, $5, $6)',
+        [request.body.currentUser.id, request.body.waitList.service.id, request.body.waitList.staff.id, true, todaysDate, join_time],
         (err, res) => {
             if (err) return next(err);
             response.redirect(`/waitList`);
         }
     );
 });
+
+// router.post('/testing', (request, response, next) => {
+//     const join_time = moment().format('h:mm a');
+//     const todaysDate = moment().format('L');
+//
+//     console.log(request.body);
+//     console.log(join_time);
+//     console.log(todaysDate);
+//     pool.query(
+//         'INSERT INTO waitlist(userid, serviceid, staffid, waiting, date, join_time) VALUES($1, $2, $3, $4, $5, $6)',
+//         [request.body.currentUser.id, request.body.waitList.service.id, request.body.waitList.staff.id, true, todaysDate, join_time],
+//         (err, res) => {
+//             if (err) return next(err);
+//             response.redirect(`/waitList`);
+//         }
+//     );
+// });
+
 router.put('/start/:id', (request, response, next) => {
     const { id } = request.params;
+    const currentTime = moment().format('h:mm a');
         pool.query(
-            `UPDATE waitlist SET in_progress=true, start_time=CURRENT_TIME(2) WHERE id=$1`,
-            [id],
+            `UPDATE waitlist SET in_progress=true, start_time=$1 , waiting=false WHERE id=$2`,
+            [currentTime, id],
             (err, res) => {
                 if (err) return next(err);
                 response.redirect(`/waitList`);
@@ -51,7 +111,7 @@ router.put('/start/:id', (request, response, next) => {
 router.put('/done/:id', (request, response, next) => {
     const { id } = request.params;
         pool.query(
-            `UPDATE waitlist SET in_progress=false, end_time=CURRENT_TIME(2) WHERE id=$1`,
+            `UPDATE waitlist SET in_progress=false, end_time=CURRENT_TIME(2), done=true WHERE id=$1`,
             [id],
             (err, res) => {
                 if (err) return next(err);

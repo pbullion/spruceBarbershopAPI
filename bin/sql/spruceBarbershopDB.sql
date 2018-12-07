@@ -5,12 +5,13 @@ CREATE TABLE waitlist(
   userID int,
   serviceID int,
   staffID int,
-  staffName character varying(50),
+  waiting boolean,
   in_progress boolean,
-  date DATE DEFAULT CURRENT_DATE,
-  join_time TIME WITH TIME ZONE DEFAULT CURRENT_TIME,
-  start_time TIME WITH TIME ZONE,
-  end_time TIME WITH TIME ZONE
+  done boolean,
+  date DATE,
+  join_time TIME,
+  start_time TIME,
+  end_time TIME
 );
 
 CREATE TABLE users(
@@ -69,21 +70,21 @@ VALUES
 ('Senior Citizen', null, '$5 off all services'),
 ('Thirsty Thursday', '10 am - 2 pm', '$5 off all services');
 
-INSERT INTO waitlist(userID, serviceID, staffID, staffName)
+INSERT INTO waitlist(userID, serviceID, staffID, staffName, waiting)
 VALUES
-(17, 3, 4, 'Ashley'),
-(16, 4, null, 'Mallory'),
-(17, 6, null, 'Michelle'),
-(15, 5, 7, null),
-(18, 4, null, 'Michelle'),
-(15, 3, 4, null),
-(18, 5, 7, 'Brooke'),
-(15, 3, 4, 'Brooke'),
-(16, 6, null, null),
-(15, 4, null, 'Ashley'),
-(16, 5, 7, null),
-(17, 6, null, null),
-(18, 4, 5, null);
+(17, 10, 4, 'Ashley', true),
+(16, 10, null, 'Mallory', true),
+(17, 10, null, 'Michelle', true),
+(15, 10, 7, null, true),
+(18, 10, null, 'Michelle', true),
+(15, 10, 4, null, true),
+(18, 5, 7, 'Brooke', true),
+(15, 3, 4, 'Brooke', true),
+(16, 6, null, null, true),
+(15, 4, null, 'Ashley', true),
+(16, 5, 7, null, true),
+(17, 6, null, null, true),
+(18, 4, 5, null, true);
 
 INSERT INTO business_hours(day, hours)
 VALUES
