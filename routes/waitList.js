@@ -39,6 +39,26 @@ router.get('/overallTimeInProgress', (request, response, next) => {
     });
 });
 
+router.get('/soonestStaffMember', (request, response, next) => {
+    const todaysDate = moment().format('L');
+    pool.query('SELECT * FROM waitlist left JOIN users ON users.id = waitlist.userid left join staff ON waitlist.staffid = staff.userid left join services on waitlist.serviceid = services.id where in_progress = true AND date = $1', [todaysDate], (err, res) => {
+        if (err) return next(err);
+        let i;
+        let totalLeftInProgress = [];
+        for (i = 0; i < res.rows.length; i++) {
+            let time = parseInt(moment(res.rows[i].start_time, "h:mm").fromNow(true), 10);
+            if (!time) {
+                time = 1;
+            }
+            let serviceTime = res.rows[i].time;
+            let remainingTime = serviceTime - time;
+            totalLeftInProgress.push(remainingTime);
+        }
+        let soonestStaffMember = Math.min(...totalLeftInProgress);
+        response.json(soonestStaffMember);
+    });
+});
+
 router.get('/overallTimeInWaiting', (request, response, next) => {
     const todaysDate = moment().format('L');
     pool.query('SELECT SUM (time) as waitlisttime FROM waitlist left JOIN users ON users.id = waitlist.userid left join staff ON waitlist.staffid = staff.userid left join services on waitlist.serviceid = services.id where waiting = true AND date = $1', [todaysDate], (err, res) => {
