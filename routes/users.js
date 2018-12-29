@@ -18,6 +18,7 @@ router.get('/:id', (request, response, next) => {
     });
 });
 
+//check if a user already has an account
 router.get('/email/:email', (request, response, next) => {
     const { email } = request.params;
     pool.query('SELECT * FROM users WHERE email = $1', [email], (err, res) => {
