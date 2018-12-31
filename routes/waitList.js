@@ -7,7 +7,7 @@ const router = Router();
 //all customers waiting and NOT in progress
 router.get('/', (request, response, next) => {
     const todaysDate = moment().format('L');
-    pool.query('select *, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name, w.id waitlistid from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services s on w.serviceid=s.id WHERE date = $1 AND waiting = true ORDER BY w.id', [todaysDate], (err, res) => {
+    pool.query('select *, u_staff.first_name staff_first_name, u_staff.last_name staff_last_name, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name, w.id waitlistid from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services s on w.serviceid=s.id left  join staff on w.staffid=staff.id left join users u_staff on staff.userid=u_staff.id WHERE date = $1 AND waiting = true', [todaysDate], (err, res) => {
         if (err) return next(err);
         response.json(res.rows);
     });
