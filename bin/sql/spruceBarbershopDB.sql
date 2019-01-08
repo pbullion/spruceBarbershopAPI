@@ -21,6 +21,7 @@ CREATE TABLE users(
   email character varying(50),
   phone_number character varying(50),
   pictureUrl character varying(200),
+  password character varying(200),
   owner boolean,
   staff boolean,
   customer boolean
@@ -41,7 +42,14 @@ CREATE TABLE staff(
   userID int,
   stylist boolean,
   barber boolean,
-  staffPicture character varying(200)
+  staffPicture character varying(200),
+  monday character varying(100),
+  tuesday character varying(100),
+  wednesday character varying(100),
+  thursday character varying(100),
+  friday character varying(100),
+  saturday character varying(100),
+  sunday character varying(100)
 );
 
 CREATE TABLE business_hours(
@@ -70,22 +78,6 @@ VALUES
 ('Senior Citizen', null, '$5 off all services'),
 ('Thirsty Thursday', '10 am - 2 pm', '$5 off all services');
 
-INSERT INTO waitlist(userID, serviceID, staffID, staffName, waiting)
-VALUES
-(17, 10, 4, 'Ashley', true),
-(16, 10, null, 'Mallory', true),
-(17, 10, null, 'Michelle', true),
-(15, 10, 7, null, true),
-(18, 10, null, 'Michelle', true),
-(15, 10, 4, null, true),
-(18, 5, 7, 'Brooke', true),
-(15, 3, 4, 'Brooke', true),
-(16, 6, null, null, true),
-(15, 4, null, 'Ashley', true),
-(16, 5, 7, null, true),
-(17, 6, null, null, true),
-(18, 4, 5, null, true);
-
 INSERT INTO business_hours(day, hours)
 VALUES
 ('Sunday', 'Closed'),
@@ -96,20 +88,20 @@ VALUES
 ('Friday', '10 am - 8 pm'),
 ('Saturday', '10 am - 4 pm');
 
-INSERT INTO staff(userID, stylist, barber, staffPicture)
+INSERT INTO staff(userID, stylist, barber, staffPicture, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
 VALUES
-(1, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg'),
-(2, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/riawna.jpg'),
-(3, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/nikki.jpg'),
-(4, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/morgan.jpg'),
-(5, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/mae.jpg'),
-(6, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/florido.jpg'),
-(7, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg'),
-(8, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/riawna.jpg'),
-(9, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/nikki.jpg'),
-(10, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/morgan.jpg'),
-(11, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/mae.jpg'),
-(12, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/florido.jpg');
+(1, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(2, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/riawna.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(3, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/nikki.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(4, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/morgan.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(5, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/mae.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(6, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/florido.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(7, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(8, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/riawna.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(9, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/nikki.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(10, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/morgan.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(11, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/mae.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
+(12, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/florido.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off');
 
 INSERT INTO services(type, category, name, description, price, time)
 VALUES

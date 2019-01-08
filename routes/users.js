@@ -36,11 +36,26 @@ router.delete('/:id', (request, response, next) => {
 });
 
 router.post('/', (request, response, next) => {
+    const { first_name, last_name, email, phone_number, password } = request.body;
+    pool.query(
+        'INSERT INTO users(first_name, last_name, email, phone_number, password, pictureUrl, owner, staff, customer) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+        [first_name, last_name, email, phone_number, password, null, false, false, true],
+        (err, res) => {
+            console.log(res);
+            if (err) return next(err);
+            response.redirect(`/users/email/${email}`);
+        }
+    );
+});
+
+router.post('/socialSignUp', (request, response, next) => {
+    console.log(request.body);
     const { first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer } = request.body.user;
     pool.query(
         'INSERT INTO users(first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
         [first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer],
         (err, res) => {
+            console.log(res);
             if (err) return next(err);
             response.redirect(`/users/email/${email}`);
         }
