@@ -9,6 +9,12 @@ router.get('/', (request, response, next) => {
         response.json(res.rows);
     });
 });
+router.get('/working', (request, response, next) => {
+    pool.query('SELECT *, staff.id staffid FROM users INNER JOIN staff ON users.id = staff.userID;', (err, res) => {
+        if (err) return next(err);
+        response.json(res.rows);
+    });
+});
 
 router.get('/:id', (request, response, next) => {
     const { id } = request.params;

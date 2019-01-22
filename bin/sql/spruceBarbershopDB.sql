@@ -43,13 +43,20 @@ CREATE TABLE staff(
   stylist boolean,
   barber boolean,
   staffPicture character varying(200),
-  monday character varying(100),
-  tuesday character varying(100),
-  wednesday character varying(100),
-  thursday character varying(100),
-  friday character varying(100),
-  saturday character varying(100),
-  sunday character varying(100)
+  monday_start TIME,
+  monday_end TIME,
+  tuesday_start TIME,
+  tuesday_end TIME,
+  wednesday_start TIME,
+  wednesday_end TIME,
+  thursday_start TIME,
+  thursday_end TIME,
+  friday_start TIME,
+  friday_end TIME,
+  saturday_start TIME,
+  saturday_end TIME,
+  sunday_start TIME,
+  sunday_end TIME
 );
 
 CREATE TABLE business_hours(
@@ -88,20 +95,20 @@ VALUES
 ('Friday', '10 am - 8 pm'),
 ('Saturday', '10 am - 4 pm');
 
-INSERT INTO staff(userID, stylist, barber, staffPicture, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
+INSERT INTO staff(userID, stylist, barber, staffPicture, monday_start, monday_end, tuesday_start, tuesday_end, wednesday_start,wednesday_end, thursday_start, thursday_end, friday_start, friday_end, saturday_start, saturday_end)
 VALUES
-(1, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(2, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/riawna.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(3, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/nikki.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(4, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/morgan.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(5, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/mae.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(6, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/florido.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(7, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(8, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/riawna.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(9, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/nikki.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(10, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/morgan.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(11, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/mae.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off'),
-(12, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/florido.jpg', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', '9 - 5', 'Off');
+(1, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(2, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/riawna.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(3, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/nikki.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(4, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/morgan.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(5, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/mae.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(6, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/florido.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(7, false, true, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/amber.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(8, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/riawna.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(9, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/nikki.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(10, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/morgan.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(11, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/mae.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00'),
+(12, true, false, 'https://www.ninezeroonesalon.com/wp-content/uploads/2016/07/florido.jpg', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00', '09:00:00', '17:00:00');
 
 INSERT INTO services(type, category, name, description, price, time)
 VALUES
