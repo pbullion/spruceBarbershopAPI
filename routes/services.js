@@ -4,7 +4,6 @@ const pool = require('../db');
 const router = Router();
 
 router.get('/', (request, response, next) => {
-    console.log('about to get all services');
     pool.query('SELECT * FROM services ORDER BY id ASC', (err, res) => {
         if (err) return next(err);
         console.log(response);

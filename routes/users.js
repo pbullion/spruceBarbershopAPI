@@ -49,7 +49,6 @@ router.post('/', (request, response, next) => {
 });
 
 router.post('/socialSignUp', (request, response, next) => {
-    console.log(request.body);
     const { first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer } = request.body.user;
     pool.query(
         'INSERT INTO users(first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
