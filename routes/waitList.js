@@ -6,7 +6,9 @@ const router = Router();
 
 //all customers waiting and NOT in progress
 router.get('/', (request, response, next) => {
-    const todaysDate = moment().format('L');
+    const todaysDate = moment().utcOffset('-06:00').format('L');
+    console.log("todays date");
+    console.log(todaysDate);
     pool.query('select *, u_staff.first_name staff_first_name, u_staff.last_name staff_last_name, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name, w.id waitlistid from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services s on w.serviceid=s.id left  join staff on w.staffid=staff.id left join users u_staff on staff.userid=u_staff.id WHERE date = $1 AND waiting = true or in_progress = true order by w.id', [todaysDate], (err, res) => {
         if (err) return next(err);
         response.json(res.rows);
@@ -14,7 +16,7 @@ router.get('/', (request, response, next) => {
 });
 //all staff members
 router.get('/staffmember/:id', (request, response, next) => {
-    const todaysDate = moment().format('L');
+    const todaysDate = moment().utcOffset('-06:00').format('L');
     console.log(todaysDate);
     const { id } = request.params;
     pool.query('select *, u_staff.first_name staff_first_name, u_staff.last_name staff_last_name, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name, w.id waitlistid from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services s on w.serviceid=s.id left  join staff on w.staffid=staff.id left join users u_staff on staff.userid=u_staff.id WHERE date = $1 AND w.staffid = $2 and waiting = true or date = $1 AND w.staffid = $2 and in_progress = true order by w.id', [todaysDate, id], (err, res) => {
@@ -73,8 +75,8 @@ router.delete('/:id', (request, response, next) => {
 });
 
 router.post('/', (request, response, next) => {
-    const join_time = moment().format('h:mm a');
-    const todaysDate = moment().format('L');
+    const join_time = moment().utcOffset('-06:00').format('h:mm a');
+    const todaysDate = moment().utcOffset('-06:00').format('L');
     if (request.body.waitList.staff.id > 0) {
         pool.query(
             'INSERT INTO waitlist(userid, serviceid, staffid, waiting, date, join_time) VALUES($1, $2, $3, $4, $5, $6)',
@@ -99,7 +101,7 @@ router.post('/', (request, response, next) => {
 
 router.put('/start/:id', (request, response, next) => {
     const { id } = request.params;
-    const currentTime = moment().format('h:mm a');
+    const currentTime = moment().utcOffset('-06:00').format('h:mm a');
     pool.query(
         `UPDATE waitlist SET in_progress=true, start_time=$1 , waiting=false WHERE id=$2`,
         [currentTime, id],
