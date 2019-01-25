@@ -39,7 +39,7 @@ router.get('/:id', (request, response, next) => {
 
 router.get('/list/:category', (request, response, next) => {
     const { category } = request.params;
-    if (category === 'stylist') {
+    if (category === 'Stylist') {
         pool.query('SELECT * FROM users INNER JOIN staff ON users.id = staff.userID WHERE stylist = true', (err, res) => {
             if (err) return next(err);
             response.json(res.rows);
