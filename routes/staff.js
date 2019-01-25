@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const pool = require('../db');
+const moment = require('moment');
 
 const router = Router();
 
@@ -10,9 +11,21 @@ router.get('/', (request, response, next) => {
     });
 });
 router.get('/working', (request, response, next) => {
-    pool.query('SELECT *, staff.id staffid FROM users INNER JOIN staff ON users.id = staff.userID;', (err, res) => {
+    pool.query('SELECT *, staff.id staffid FROM users INNER JOIN staff ON users.id = staff.userID order by staffid', (err, res) => {
         if (err) return next(err);
-        response.json(res.rows);
+        const start = moment().format("dddd").toLowerCase() + "_start";
+        const end = moment().format("dddd").toLowerCase() + "_end";
+        const now = moment().utcOffset('-06:00').format('H:mm:ss');
+        const newResponse = []
+        for (let i = 0; i < res.rows.length; i++) {
+            if (now > res.rows[i][start] && now < res.rows[i][end]) {
+                res.rows[i].isWorking = true
+            } else {
+                res.rows[i].isWorking = false
+            }
+            newResponse.push(res.rows[i])
+        }
+        response.json(newResponse);
     });
 });
 
