@@ -14,7 +14,6 @@ router.get('/', (request, response, next) => {
 
 router.get('/staffmember/:id', (request, response, next) => {
     const todaysDate = moment().utcOffset('-06:00').format('L');
-    console.log("staff id todays date", todaysDate);
     const { id } = request.params;
     pool.query('select *, u_staff.first_name staff_first_name, u_staff.last_name staff_last_name, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name, w.id waitlistid from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services s on w.serviceid=s.id left  join staff on w.staffid=staff.id left join users u_staff on staff.userid=u_staff.id WHERE date = $1 AND w.staffid = $2 and waiting = true or date = $1 AND w.staffid = $2 and in_progress = true order by w.id', [todaysDate, id], (err, res) => {
         if (err) return next(err);
@@ -22,14 +21,41 @@ router.get('/staffmember/:id', (request, response, next) => {
     });
 });
 
-//all customers in progress
-// router.get('/inProgressList', (request, response, next) => {
-//     const todaysDate = moment().utcOffset('-06:00').format('L');
-//     pool.query('select *, u_staff.first_name staff_first_name, u_staff.last_name staff_last_name, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name, w.id waitlistid from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services s on w.serviceid=s.id left  join staff on w.staffid=staff.id left join users u_staff on staff.userid=u_staff.id WHERE date = $1 AND in_progress = true ORDER BY w.id', [todaysDate], (err, res) => {
-//         if (err) return next(err);
-//         response.json(res.rows);
-//     });
-// });
+router.get('/totals', (request, response, next) => {
+    const todaysDate = moment().utcOffset('-06:00').format('L');
+    pool.query('select *, u_staff.first_name staff_first_name, u_staff.last_name staff_last_name, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name, w.id waitlistid from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services s on w.serviceid=s.id left  join staff on w.staffid=staff.id left join users u_staff on staff.userid=u_staff.id WHERE date = $1 and waiting = true or date = $1 and in_progress = true order by w.id', [todaysDate], (err, res) => {
+        if (err) return next(err);
+        const waittimes = {};
+        const staffid = [];
+        const newStaffTimes = [];
+        for (let i = 0; i < res.rows.length; i++) {
+            if (res.rows[i].in_progress) {
+                staffid.push(res.rows[i].staffid);
+                waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm").utcOffset('+6:00').fromNow(true), 10);
+                if (!waittimes[res.rows[i].staffid]) {
+                    waittimes[res.rows[i].staffid] = res.rows[i].time;
+                }
+            } else if (res.rows[i].waiting) {
+                if (i === 0) {
+                    staffid.push(res.rows[i].staffid);
+                    waittimes[res.rows[i].staffid] = 0 + waittimes[res.rows[i].staffid];
+                } else if (i === 1) {
+                    waittimes[res.rows[i].staffid] = res.rows[i].time + waittimes[res.rows[i].staffid];
+                } else {
+                    waittimes[res.rows[i].staffid] = res.rows[i].time + waittimes[res.rows[i].staffid];
+                }
+            }
+        }
+        for (let i = 0; i < staffid.length; i++) {
+            newStaffTimes.push({ time : {staffid: staffid[i], waittime: waittimes[staffid[i]]}});
+        }
+        newStaffTimes.sort(function (a, b) {
+            return a.time.waittime - b.time.waittime
+        });
+        const lowestWait = {"lowestWait" : newStaffTimes[0]};
+        response.json([lowestWait, newStaffTimes]);
+    });
+});
 
 router.get('/:id', (request, response, next) => {
     const { id } = request.params;
