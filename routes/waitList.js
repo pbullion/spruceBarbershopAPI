@@ -76,9 +76,6 @@ router.delete('/:id', (request, response, next) => {
 router.post('/', (request, response, next) => {
     const join_time = moment().utcOffset('-06:00').format('h:mm a');
     const todaysDate = moment().utcOffset('-06:00').format('L');
-    //leave in for now for testing
-    console.log("join time post", join_time);
-    console.log("todays date post", todaysDate);
     pool.query(
         'INSERT INTO waitlist(userid, serviceid, staffid, waiting, date, join_time) VALUES($1, $2, $3, $4, $5, $6)',
         [request.body.currentUser.id, request.body.waitList.service.id, request.body.waitList.staff.id, true, todaysDate, join_time],
