@@ -31,9 +31,9 @@ router.get('/totals', (request, response, next) => {
         for (let i = 0; i < res.rows.length; i++) {
             if (res.rows[i].in_progress) {
                 staffid.push(res.rows[i].staffid);
-                waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm").utcOffset('+6:00').fromNow(true), 10);
-                console.log("just the time diff", parseInt(moment(res.rows[i].start_time, "HH:mm").utcOffset('+6:00').fromNow(true), 10));
-                console.log("time remaining", res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm").utcOffset('+6:00').fromNow(true), 10));
+                waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('+6:00').fromNow(true), 10);
+                console.log("just the time diff", parseInt(moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('+6:00').fromNow(true), 10));
+                console.log("time remaining", res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('+6:00').fromNow(true), 10));
                 if (!waittimes[res.rows[i].staffid]) {
                     waittimes[res.rows[i].staffid] = res.rows[i].time;
                 }
