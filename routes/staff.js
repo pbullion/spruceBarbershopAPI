@@ -22,9 +22,15 @@ router.get('/working', (request, response, next) => {
         console.log("now", now);
         for (let i = 0; i < res.rows.length; i++) {
             if (now > res.rows[i][start] && now < res.rows[i][end]) {
+                console.log('in the if, now', now);
+                console.log('in the if, start', res.rows[i][start]);
+                console.log('in the if, end', res.rows[i][end]);
                 console.log('working is TRUE');
                 res.rows[i].isWorking = true
             } else {
+                console.log('in the else, now', now);
+                console.log('in the else, start', res.rows[i][start]);
+                console.log('in the else, end', res.rows[i][end]);
                 console.log('working is FAAAAAALSE');
                 res.rows[i].isWorking = false
             }
