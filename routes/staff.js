@@ -22,8 +22,10 @@ router.get('/working', (request, response, next) => {
         console.log("now", now);
         for (let i = 0; i < res.rows.length; i++) {
             if (now > res.rows[i][start] && now < res.rows[i][end]) {
+                console.log('working is TRUE');
                 res.rows[i].isWorking = true
             } else {
+                console.log('working is FAAAAAALSE');
                 res.rows[i].isWorking = false
             }
             newResponse.push(res.rows[i])
