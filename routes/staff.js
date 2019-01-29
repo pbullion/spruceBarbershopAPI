@@ -21,7 +21,7 @@ router.get('/working', (request, response, next) => {
         console.log("end", end);
         console.log("now", now);
         for (let i = 0; i < res.rows.length; i++) {
-            if (now > res.rows[i][start] && now < res.rows[i][end]) {
+            if (now.isBetween(start, end)) {
                 console.log('in the if, now', now);
                 console.log('in the if, start', res.rows[i][start]);
                 console.log('in the if, end', res.rows[i][end]);
