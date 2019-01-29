@@ -15,8 +15,11 @@ router.get('/working', (request, response, next) => {
         if (err) return next(err);
         const start = moment().format("dddd").toLowerCase() + "_start";
         const end = moment().format("dddd").toLowerCase() + "_end";
-        const now = moment().utcOffset('-06:00').format('H:mm:ss');
+        const now = moment().utcOffset('-06:00').format('HH:mm:ss');
         const newResponse = [];
+        console.log("start", start);
+        console.log("end", end);
+        console.log("now", now);
         for (let i = 0; i < res.rows.length; i++) {
             if (now > res.rows[i][start] && now < res.rows[i][end]) {
                 res.rows[i].isWorking = true
