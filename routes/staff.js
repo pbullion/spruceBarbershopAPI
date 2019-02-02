@@ -17,21 +17,11 @@ router.get('/working', (request, response, next) => {
         const end = moment().format("dddd").toLowerCase() + "_end";
         const now = moment().utcOffset('-06:00').format('HH:mm:ss');
         const newResponse = [];
-        console.log("start", start);
-        console.log("end", end);
-        console.log("now", now);
         for (let i = 0; i < res.rows.length; i++) {
-            if (now.isBetween(start, end)) {
-                console.log('in the if, now', now);
-                console.log('in the if, start', res.rows[i][start]);
-                console.log('in the if, end', res.rows[i][end]);
-                console.log('working is TRUE');
+            console.log(moment().isBetween(start,end));
+            if (now > res.rows[i][start] && now < res.rows[i][end]) {
                 res.rows[i].isWorking = true
             } else {
-                console.log('in the else, now', now);
-                console.log('in the else, start', res.rows[i][start]);
-                console.log('in the else, end', res.rows[i][end]);
-                console.log('working is FAAAAAALSE');
                 res.rows[i].isWorking = false
             }
             newResponse.push(res.rows[i])
