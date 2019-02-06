@@ -13,14 +13,11 @@ router.get('/', (request, response, next) => {
 router.get('/working', (request, response, next) => {
     pool.query('SELECT *, staff.id staffid FROM users INNER JOIN staff ON users.id = staff.userID order by staffid', (err, res) => {
         if (err) return next(err);
-        const start = moment().format("dddd").toLowerCase() + "_start";
-        const end = moment().format("dddd").toLowerCase() + "_end";
+        const start = moment().utcOffset('-06:00').format("dddd").toLowerCase() + "_start";
+        const end = moment().utcOffset('-06:00').format("dddd").toLowerCase() + "_end";
         const now = moment().utcOffset('-06:00').format('HH:mm:ss');
         const newResponse = [];
         for (let i = 0; i < res.rows.length; i++) {
-            console.log(moment().isBetween(start,end));
-            console.log(res.rows[i][start]);
-            console.log(res.rows[i][end]);
             if (now > res.rows[i][start] && now < res.rows[i][end]) {
                 res.rows[i].isWorking = true
             } else {
