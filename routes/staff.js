@@ -5,7 +5,7 @@ const moment = require('moment');
 const router = Router();
 
 router.get('/', (request, response, next) => {
-    pool.query('SELECT * FROM staff ORDER BY id ASC', (err, res) => {
+    pool.query('SELECT *, staff.id staffid FROM users INNER JOIN staff ON users.id = staff.userID order by staffid', (err, res) => {
         if (err) return next(err);
         response.json(res.rows);
     });
@@ -40,7 +40,7 @@ router.get('/:id', (request, response, next) => {
 
 router.get('/list/:category', (request, response, next) => {
     const { category } = request.params;
-    if (category === 'Stylist') {
+    if (category === 'stylist') {
         pool.query('SELECT * FROM users INNER JOIN staff ON users.id = staff.userID WHERE stylist = true', (err, res) => {
             if (err) return next(err);
             response.json(res.rows);
