@@ -19,6 +19,8 @@ router.get('/working', (request, response, next) => {
         const newResponse = [];
         for (let i = 0; i < res.rows.length; i++) {
             console.log(moment().isBetween(start,end));
+            console.log(res.rows[i][start]);
+            console.log(res.rows[i][end]);
             if (now > res.rows[i][start] && now < res.rows[i][end]) {
                 res.rows[i].isWorking = true
             } else {
