@@ -31,10 +31,7 @@ router.get('/totals', (request, response, next) => {
         for (let i = 0; i < res.rows.length; i++) {
             if (res.rows[i].in_progress) {
                 staffid.push(res.rows[i].staffid);
-                const utcDate = moment().format('L');
-                const dateTime = moment(utcDate + ' ' + res.rows[i].start_time, 'DD/MM/YYYY HH:mm');
-                console.log(dateTime.format('YYYY-MM-DD HH:mm'));
-                waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(updatedTime, "HH:mm:ss").fromNow(true), 10);
+                waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('+6:00').fromNow(true), 10);
                 if (!waittimes[res.rows[i].staffid]) {
                     waittimes[res.rows[i].staffid] = res.rows[i].time;
                 }
