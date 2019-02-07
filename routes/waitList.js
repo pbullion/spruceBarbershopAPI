@@ -31,11 +31,11 @@ router.get('/totals', (request, response, next) => {
         for (let i = 0; i < res.rows.length; i++) {
             if (res.rows[i].in_progress) {
                 staffid.push(res.rows[i].staffid);
-                const actionTime = moment(res.rows[i].start_time + "+06:00", "YYYY-MM-DD HH:mm:ssZ");
-                console.log('action time', actionTime);
-                console.log('action time', actionTime.fromNow());
-                waittimes[res.rows[i].staffid] = res.rows[i].time - actionTime.fromNow();
-                console.log(res.rows[i].start_time);
+                const utcDate = moment().format('L');
+                const updatedTime = utcDate + " " + moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('+06:00');
+                console.log(updatedTime);
+                waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(updatedTime, "HH:mm:ss").fromNow(true), 10);
+                console.log("*********", res.rows[i].time - parseInt(moment(updatedTime, "HH:mm:ss").fromNow(true), 10));
                 if (!waittimes[res.rows[i].staffid]) {
                     waittimes[res.rows[i].staffid] = res.rows[i].time;
                 }
