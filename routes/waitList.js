@@ -32,7 +32,10 @@ router.get('/totals', (request, response, next) => {
             if (res.rows[i].in_progress) {
                 staffid.push(res.rows[i].staffid);
                 waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('+06:00').fromNow(true), 10);
-                console.log(waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('+06:00').fromNow(true), 10))
+                console.log("plus offset", moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('-06:00').fromNow(true));
+                console.log("minus offset", moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('+06:00').fromNow(true));
+                console.log("no offset", moment(res.rows[i].start_time, "HH:mm:ss").fromNow(true));
+                console.log(res.rows[i].start_time);
                 if (!waittimes[res.rows[i].staffid]) {
                     waittimes[res.rows[i].staffid] = res.rows[i].time;
                 }
@@ -75,7 +78,7 @@ router.delete('/:id', (request, response, next) => {
 });
 
 router.post('/', (request, response, next) => {
-    const join_time = moment().utcOffset('-06:00').format('h:mm a');
+    const join_time = moment().utcOffset('-06:00').format('HH:mm:ss');
     const todaysDate = moment().utcOffset('-06:00').format('L');
     pool.query(
         'INSERT INTO waitlist(userid, serviceid, staffid, waiting, date, join_time) VALUES($1, $2, $3, $4, $5, $6)',
@@ -89,7 +92,7 @@ router.post('/', (request, response, next) => {
 
 router.put('/start/:id', (request, response, next) => {
     const { id } = request.params;
-    const currentTime = moment().utcOffset('-06:00').format('h:mm a');
+    const currentTime = moment().utcOffset('-06:00').format('HH:mm:ss');
     pool.query(
         `UPDATE waitlist SET in_progress=true, start_time=$1 , waiting=false WHERE id=$2`,
         [currentTime, id],
@@ -101,7 +104,7 @@ router.put('/start/:id', (request, response, next) => {
 });
 router.put('/done/:id', (request, response, next) => {
     const { id } = request.params;
-    const currentTime = moment().utcOffset('-06:00').format('h:mm a');
+    const currentTime = moment().utcOffset('-06:00').format('HH:mm:ss');
     pool.query(
         `UPDATE waitlist SET in_progress=false, end_time=$1, done=true WHERE id=$2`,
         [currentTime, id],
