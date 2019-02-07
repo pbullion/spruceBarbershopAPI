@@ -31,9 +31,8 @@ router.get('/totals', (request, response, next) => {
         for (let i = 0; i < res.rows.length; i++) {
             if (res.rows[i].in_progress) {
                 staffid.push(res.rows[i].staffid);
-                waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm:ss").fromNow(true).utcOffset('-06:00'), 10);
-                console.log("minus offset", moment(res.rows[i].start_time, "HH:mm:ss").fromNow(true).utcOffset('-06:00'));
-                console.log("no offset", moment(res.rows[i].start_time, "HH:mm:ss").fromNow(true));
+                const actionTime = moment(res.rows[i].start_time + "-06:00", "YYYY-MM-DD HH:mm:ssZ");
+                waittimes[res.rows[i].staffid] = res.rows[i].time - actionTime.fromNow();
                 console.log(res.rows[i].start_time);
                 if (!waittimes[res.rows[i].staffid]) {
                     waittimes[res.rows[i].staffid] = res.rows[i].time;
