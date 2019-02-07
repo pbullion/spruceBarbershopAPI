@@ -23,7 +23,6 @@ router.get('/staffmember/:id', (request, response, next) => {
 
 router.get('/totals', (request, response, next) => {
     const todaysDate = moment().utcOffset('-06:00').format('L');
-    console.log("todays date", todaysDate);
     pool.query('select *, u_staff.first_name staff_first_name, u_staff.last_name staff_last_name, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name, w.id waitlistid from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services s on w.serviceid=s.id left  join staff on w.staffid=staff.id left join users u_staff on staff.userid=u_staff.id WHERE date = $1 and waiting = true or date = $1 and in_progress = true order by w.id', [todaysDate], (err, res) => {
         if (err) return next(err);
         const waittimes = {};
@@ -32,8 +31,7 @@ router.get('/totals', (request, response, next) => {
         for (let i = 0; i < res.rows.length; i++) {
             if (res.rows[i].in_progress) {
                 staffid.push(res.rows[i].staffid);
-                console.log("timememeee", res.rows[i].time);
-                waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('+6:00').fromNow(true), 10);
+                waittimes[res.rows[i].staffid] = res.rows[i].time - parseInt(moment(res.rows[i].start_time, "HH:mm:ss").utcOffset('-06:00').fromNow(true), 10);
 
                 if (!waittimes[res.rows[i].staffid]) {
                     waittimes[res.rows[i].staffid] = res.rows[i].time;
