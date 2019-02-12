@@ -77,8 +77,8 @@ router.post('/', (request, response, next) => {
     const join_time = moment().utcOffset('-06:00').format('HH:mm:ss');
     const todaysDate = moment().utcOffset('-06:00').format('L');
     pool.query(
-        'INSERT INTO waitlist(userid, serviceid, staffid, waiting, date, join_time) VALUES($1, $2, $3, $4, $5, $6)',
-        [request.body.currentUser.id, request.body.waitList.service.id, request.body.waitList.staff.id, true, todaysDate, join_time],
+        'INSERT INTO waitlist(userid, serviceid, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7)',
+        [request.body.currentUser.id, request.body.waitList.service.id, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
         (err, res) => {
             if (err) return next(err);
             response.redirect(`/waitList`);

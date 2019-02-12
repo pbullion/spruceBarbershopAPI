@@ -11,7 +11,7 @@ router.get('/', (request, response, next) => {
     });
 });
 router.get('/working', (request, response, next) => {
-    pool.query('SELECT *, staff.id staffid FROM users INNER JOIN staff ON users.id = staff.userID order by staffid', (err, res) => {
+    pool.query('SELECT *, staff.id staffid FROM users INNER JOIN staff ON users.id = staff.userID where staff.appt_only = false order by staffid', (err, res) => {
         if (err) return next(err);
         const start = moment().utcOffset('-06:00').format("dddd").toLowerCase() + "_start";
         const end = moment().utcOffset('-06:00').format("dddd").toLowerCase() + "_end";
