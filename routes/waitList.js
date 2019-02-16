@@ -15,8 +15,10 @@ router.get('/', (request, response, next) => {
 router.get('/staffmember/:id', (request, response, next) => {
     const todaysDate = moment().utcOffset('-06:00').format('L');
     const { id } = request.params;
-    pool.query('select *, u_staff.first_name staff_first_name, u_staff.last_name staff_last_name, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name, w.id waitlistid from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services s on w.serviceid=s.id left  join staff on w.staffid=staff.id left join users u_staff on staff.userid=u_staff.id WHERE date = $1 AND w.staffid = $2 and waiting = true or date = $1 AND w.staffid = $2 and in_progress = true order by w.id', [todaysDate, id], (err, res) => {
+    console.log(id);
+    pool.query('select *, u_staff.first_name staff_first_name, u_staff.last_name staff_last_name, u_customer_name.first_name customer_first_name, u_customer_name.last_name customer_last_name, w.id waitlistid, service1.id service1_id, service1.type service1_type, service1.category service1_category, service1.name service1_name, service1.description service1_description, service1.price service1_price, service1.time service1_time, service2.id service2_id, service2.type service2_type, service2.category service2_category, service2.name service2_name, service2.description service2_description, service2.price service2_price, service2.time service2_time  from waitlist w inner join users u_customer_name on w.userid=u_customer_name.id inner join services service1 on w.service1id=service1.id inner join services service2 on w.service2id=service2.id left  join staff on w.staffid=staff.id left join users u_staff on staff.userid=u_staff.id WHERE date = $1 AND w.staffid = $2 and waiting = true or date = $1 AND w.staffid = $2 and in_progress = true order by w.id', [todaysDate, id], (err, res) => {
         if (err) return next(err);
+        console.log(res.rows);
         response.json(res.rows);
     });
 });
@@ -77,8 +79,8 @@ router.post('/', (request, response, next) => {
     const join_time = moment().utcOffset('-06:00').format('HH:mm:ss');
     const todaysDate = moment().utcOffset('-06:00').format('L');
     pool.query(
-        'INSERT INTO waitlist(userid, serviceid, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7)',
-        [request.body.currentUser.id, request.body.waitList.service.id, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
+        'INSERT INTO waitlist(userid, service1id, service2id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+        [request.body.currentUser.id, request.body.waitList.service1.id, request.body.waitList.service2.id, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
         (err, res) => {
             if (err) return next(err);
             response.redirect(`/waitList`);

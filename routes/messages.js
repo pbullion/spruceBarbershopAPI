@@ -6,7 +6,7 @@ const moment = require('moment');
 const router = Router();
 
 router.get('/', (request, response, next) => {
-    pool.query('SELECT * FROM messages ORDER BY id ASC', (err, res) => {
+    pool.query('SELECT * FROM messages ORDER BY id asc', (err, res) => {
         if (err) return next(err);
         response.json(res.rows);
     });
@@ -62,5 +62,13 @@ router.get('/sendMessage', (request, response, next) => {
     );
 });
 
+
+router.delete('/:id', (request, response, next) => {
+    const { id } = request.params;
+    pool.query('DELETE FROM messages WHERE id = $1', [id], (err, res) => {
+        if (err) return next(err);
+        response.redirect('/messages');
+    });
+});
 
 module.exports = router;
