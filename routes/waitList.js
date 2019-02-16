@@ -78,14 +78,25 @@ router.delete('/:id', (request, response, next) => {
 router.post('/', (request, response, next) => {
     const join_time = moment().utcOffset('-06:00').format('HH:mm:ss');
     const todaysDate = moment().utcOffset('-06:00').format('L');
-    pool.query(
-        'INSERT INTO waitlist(userid, service1id, service2id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
-        [request.body.currentUser.id, request.body.waitList.service1.id, request.body.waitList.service2.id, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
-        (err, res) => {
-            if (err) return next(err);
-            response.redirect(`/waitList`);
-        }
-    );
+    if (request.body.waitList.service2.id) {
+        pool.query(
+            'INSERT INTO waitlist(userid, service1id, service2id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+            [request.body.currentUser.id, request.body.waitList.service1.id, request.body.waitList.service2.id, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
+            (err, res) => {
+                if (err) return next(err);
+                response.redirect(`/waitList`);
+            }
+        );
+    } else {
+        pool.query(
+            'INSERT INTO waitlist(userid, service1id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7)',
+            [request.body.currentUser.id, request.body.waitList.service1.id, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
+            (err, res) => {
+                if (err) return next(err);
+                response.redirect(`/waitList`);
+            }
+        );
+    }
 });
 
 router.put('/start/:id', (request, response, next) => {
