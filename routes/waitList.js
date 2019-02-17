@@ -89,8 +89,8 @@ router.post('/', (request, response, next) => {
         );
     } else {
         pool.query(
-            'INSERT INTO waitlist(userid, service1id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7)',
-            [request.body.currentUser.id, request.body.waitList.service1.id, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
+            'INSERT INTO waitlist(userid, service1id, service2id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+            [request.body.currentUser.id, request.body.waitList.service1.id, 0, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
             (err, res) => {
                 if (err) return next(err);
                 response.redirect(`/waitList`);
