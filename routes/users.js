@@ -36,12 +36,11 @@ router.delete('/:id', (request, response, next) => {
 });
 
 router.post('/', (request, response, next) => {
-    const { first_name, last_name, email, phone_number, password } = request.body;
+    const { first_name, last_name, email } = request.body;
     pool.query(
-        'INSERT INTO users(first_name, last_name, email, phone_number, password, pictureUrl, owner, staff, customer) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-        [first_name, last_name, email, phone_number, password, null, false, false, true],
+        'INSERT INTO users(first_name, last_name, email, customer) VALUES($1, $2, $3, $4)',
+        [first_name, last_name, email, true],
         (err, res) => {
-            console.log(res);
             if (err) return next(err);
             response.redirect(`/users/email/${email}`);
         }
