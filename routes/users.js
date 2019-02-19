@@ -37,14 +37,22 @@ router.delete('/:id', (request, response, next) => {
 
 router.post('/', (request, response, next) => {
     const { first_name, last_name, email } = request.body;
-    pool.query(
-        'INSERT INTO users(first_name, last_name, email, customer) VALUES($1, $2, $3, $4)',
-        [first_name, last_name, email, true],
-        (err, res) => {
-            if (err) return next(err);
+    pool.query('SELECT * FROM users WHERE email = $1', [email], (err, res) => {
+        if (err) return next(err);
+        console.log("here is the length", res.rows.length);
+        if (res.rows.length > 0) {
             response.redirect(`/users/email/${email}`);
+        } else {
+            pool.query(
+                'INSERT INTO users(first_name, last_name, email, customer) VALUES($1, $2, $3, $4)',
+                [first_name, last_name, email, true],
+                (err, res) => {
+                    if (err) return next(err);
+                    response.redirect(`/users/email/${email}`);
+                }
+            );
         }
-    );
+    });
 });
 
 router.post('/socialSignUp', (request, response, next) => {
