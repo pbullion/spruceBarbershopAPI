@@ -60,8 +60,8 @@ router.post('/socialSignUp', (request, response, next) => {
     console.log(request.body.token);
     const { first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer } = request.body.user;
     pool.query(
-        'INSERT INTO users(first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer, expo_token) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-        [first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer, request.body.token],
+        'INSERT INTO users(first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer, expo_token, shop) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+        [first_name, last_name, email, phone_number, pictureUrl, owner, staff, customer, request.body.token, false],
         (err, res) => {
             console.log(res);
             if (err) return next(err);

@@ -79,15 +79,38 @@ router.delete('/:id', (request, response, next) => {
 router.post('/', (request, response, next) => {
     const join_time = moment().utcOffset('-06:00').format('HH:mm:ss');
     const todaysDate = moment().utcOffset('-06:00').format('L');
+    console.log("in the post");
+    // if (request.body.waitList.service2) {
+    //     pool.query(
+    //         'INSERT INTO waitlist(userid, service1id, service2id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+    //         [request.body.currentUser.id, request.body.waitList.service1.id, request.body.waitList.service2.id, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
+    //         (err, res) => {
+    //             if (err) return next(err);
+    //             response.redirect(`/waitList`);
+    //         }
+    //     );
+    // } else {
+    //     pool.query(
+    //         'INSERT INTO waitlist(userid, service1id, service2id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+    //         [request.body.currentUser.id, request.body.waitList.service1.id, 0, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
+    //         (err, res) => {
+    //             if (err) return next(err);
+    //             response.redirect(`/waitList`)}
+    //         )
+    //         };
     pool.query(
-        'SELECT * from waitlist WHERE date = $1 and userid = $2) VALUES($1, $2)',
+        'SELECT * from waitlist WHERE date = $1 and userid = $2',
         [todaysDate, request.body.currentUser.id],
         (err, res) => {
             if (err) return next(err);
+            console.log("in the res");
+            console.log(res);
             if (res.rows.length > 0) {
+                console.log("you are already on the list");
                 response.json({message: "You are already on the list!"})
             } else {
                 if (request.body.waitList.service2) {
+                    console.log("in service two query");
                     pool.query(
                         'INSERT INTO waitlist(userid, service1id, service2id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
                         [request.body.currentUser.id, request.body.waitList.service1.id, request.body.waitList.service2.id, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
@@ -97,6 +120,7 @@ router.post('/', (request, response, next) => {
                         }
                     );
                 } else {
+                    console.log("in service 1 query");
                     pool.query(
                         'INSERT INTO waitlist(userid, service1id, service2id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
                         [request.body.currentUser.id, request.body.waitList.service1.id, 0, request.body.waitList.staff.id, true, todaysDate, join_time, request.body.waitList.mobile_join],
@@ -123,6 +147,18 @@ router.put('/start/:id', (request, response, next) => {
         }
     )
 });
+
+router.put('/socialSignUp', (request, response, next) => {
+    pool.query(
+        `UPDATE users SET expo_token = $1 WHERE id=$2`,
+        [request.body.token, request.body.user.id],
+        (err, res) => {
+            if (err) return next(err);
+            response.redirect(`/waitList`);
+        }
+    )
+});
+
 router.put('/done/:id', (request, response, next) => {
     const { id } = request.params;
     const currentTime = moment().utcOffset('-06:00').format('HH:mm:ss');
