@@ -98,7 +98,7 @@ router.post('/', (request, response, next) => {
     //         )
     //         };
     pool.query(
-        'SELECT * from waitlist WHERE date = $1 and userid = $2 and in_progress = true and where date = $1 and userid = $2 waiting = true',
+        'SELECT * from waitlist WHERE date = $1 and userid = $2 and waiting = true',
         [todaysDate, request.body.currentUser.id],
         (err, res) => {
             if (err) return next(err);
