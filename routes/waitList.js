@@ -79,6 +79,7 @@ router.delete('/:id', (request, response, next) => {
 router.post('/', (request, response, next) => {
     const join_time = moment().utcOffset('-06:00').format('HH:mm:ss');
     const todaysDate = moment().utcOffset('-06:00').format('L');
+    console.log("current user", request.body.currentUser);
     // if (request.body.waitList.service2) {
     //     pool.query(
     //         'INSERT INTO waitlist(userid, service1id, service2id, staffid, waiting, date, join_time, mobile_join) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
@@ -98,12 +99,12 @@ router.post('/', (request, response, next) => {
     //         )
     //         };
     pool.query(
-        'SELECT * from waitlist WHERE date = $1 and userid = $2 and waiting = true or in_progress = true',
+        'SELECT * from waitlist WHERE date = $1 and userid = $2 and waiting = true',
         [todaysDate, request.body.currentUser.id],
         (err, res) => {
             if (err) return next(err);
             console.log("in the res");
-            console.log(res);
+            console.log(res.rows);
             if (res.rows.length > 0) {
                 console.log("you are already on the list");
                 response.json({message: "You are already on the list!"})
