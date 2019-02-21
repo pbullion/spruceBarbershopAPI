@@ -21,7 +21,7 @@ router.post('/', (request, response, next) => {
         [title, body, icon, iconColor, todaysDate],
         (err, res) => {
             if (err) return next(err);
-            response.status(200);
+            response.redirect('/messages');
         }
     );
 });
