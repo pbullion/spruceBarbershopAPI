@@ -70,6 +70,22 @@ router.post('/socialSignUp', (request, response, next) => {
     );
 });
 
+router.put('/socialSignUp', (request, response, next) => {
+    console.log(request.body.user.email);
+    console.log(request.body.token);
+    pool.query(
+        'UPDATE users SET expo_token = $1 WHERE email = $2',
+        [request.body.token, request.body.user.email],
+        (err, res) => {
+            console.log("err", err);
+            console.log("res", res);
+            console.log("res", request.body.user.email);
+            if (err) return next(err);
+            response.redirect(`/users/email/${request.body.user.email}`);
+        }
+    );
+});
+
 router.put('/:id', (request, response, next) => {
     const { id } = request.params;
     const keys = ['name', 'personality'];
