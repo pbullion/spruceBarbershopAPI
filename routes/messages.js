@@ -21,7 +21,9 @@ router.post('/', (request, response, next) => {
         [title, body, icon, iconColor, todaysDate],
         (err, res) => {
             if (err) return next(err);
-            response.redirect('/messages');
+            response.status(201).json({
+                message: 'Created message successfully',
+            })
         }
     );
 });
@@ -32,29 +34,32 @@ router.get('/sendMessage', (request, response, next) => {
         'SELECT * FROM users',
         (err, res) => {
             if (err) return next(err);
-            let messages = [];
-            res.rows.forEach(function(element) {
-                if (element.expo_token !== null) {
+            for (let i = 0; i < res.rows.length; i++) {
+                let messages = [];
+                if (!res.rows[i].expo_token) {
+                    console.log("its false", [i])
+                } else {
                     messages.push({
-                        "to": element.expo_token,
+                        "to": res.rows[i].expo_token,
                         "sound": "default",
                         "body": body,
                         "title": title,
                         "badge": 1
                     });
+                    fetch('https://exp.host/--/api/v2/push/send', {
+                        method: 'post',
+                        headers: {
+                            "accept": "application/json",
+                            "content-type": "application/json"
+                        },
+                        body: JSON.stringify(messages)
+                    })
+                        .catch(reason => {
+                            console.log(reason)
+                        });
                 }
-                fetch('https://exp.host/--/api/v2/push/send', {
-                    method: 'post',
-                    headers: {
-                        "accept": "application/json",
-                        "content-type": "application/json"
-                    },
-                    body: JSON.stringify(messages)
-                })
-                    .catch(reason => {
-                        console.log(reason)
-                    });
-            });
+
+            }
             response.status(201).json({
                 message: 'Created message successfully',
             })
