@@ -70,6 +70,7 @@ router.get('/sendMessage', (request, response, next) => {
 
 router.delete('/:id', (request, response, next) => {
     const { id } = request.params;
+    console.log(id);
     pool.query('DELETE FROM messages WHERE id = $1', [id], (err, res) => {
         if (err) return next(err);
         response.redirect('/messages');
