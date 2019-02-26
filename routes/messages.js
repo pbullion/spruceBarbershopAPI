@@ -28,17 +28,18 @@ router.post('/', (request, response, next) => {
     );
 });
 
-router.get('/sendMessage', (request, response, next) => {
-    const { title, body, icon, iconColor } = request.body.message;
+router.post('/sendMessage', (request, response, next) => {
+    const { title, body } = request.body.message;
     pool.query(
-        'SELECT * FROM users',
-        (err, res) => {
+        'SELECT * FROM users', (err, res) => {
             if (err) return next(err);
+            // console.log(res);
             for (let i = 0; i < res.rows.length; i++) {
                 let messages = [];
                 if (!res.rows[i].expo_token) {
-                    console.log("its false", [i])
+                    // console.log("its false", [i])
                 } else {
+                    // console.log(res.rows[i].expo_token);
                     messages.push({
                         "to": res.rows[i].expo_token,
                         "sound": "default",
@@ -73,8 +74,9 @@ router.delete('/:id', (request, response, next) => {
     console.log(id);
     pool.query('DELETE FROM messages WHERE id = $1', [id], (err, res) => {
         if (err) return next(err);
-        response.redirect('/messages');
-    });
+        response.status(201).json({
+            message: 'Created message successfully',
+        })    });
 });
 
 module.exports = router;
