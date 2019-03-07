@@ -72,7 +72,9 @@ router.delete('/:id', (request, response, next) => {
     const { id } = request.params;
     pool.query('DELETE FROM waitlist WHERE id = $1', [id], (err, res) => {
         if (err) return next(err);
-        response.redirect('/waitList');
+        response.status(201).json({
+            message: 'Successfully Deleted',
+        })
     });
 });
 
@@ -142,8 +144,9 @@ router.put('/start/:id', (request, response, next) => {
         `UPDATE waitlist SET in_progress=true, start_time=$1 , waiting=false WHERE id=$2`,
         [currentTime, id],
         (err, res) => {
-            if (err) return next(err);
-            response.redirect(`/waitList`);
+            response.status(201).json({
+                message: 'Successfully Added',
+            })
         }
     )
 });
@@ -168,7 +171,9 @@ router.put('/done/:id', (request, response, next) => {
         (err, res) => {
             if (err) return next(err);
             console.log(err);
-            response.redirect(`/waitList`);
+            response.status(201).json({
+                message: 'Successfully Finished',
+            })
         }
     )
 });
