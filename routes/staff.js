@@ -80,25 +80,34 @@ router.post('/', (request, response, next) => {
     );
 });
 
-router.put('/:id', (request, response, next) => {
+router.put('/appointmentsFalse/:id', (request, response, next) => {
     const { id } = request.params;
-    const keys = ['name', 'personality'];
-    const fields = [];
+    pool.query(
+        `UPDATE staff SET appt_only = false WHERE id=$1`,
+        [id],
+        (err, res) => {
+            if (err) return next(err);
+            console.log(err);
+            response.status(201).json({
+                message: 'Successfully updated to false',
+            })
+        }
+    )
+});
 
-    keys.forEach(key => {
-        if (request.body[key]) fields.push(key);
-    });
-
-    fields.forEach((field, index) => {
-        pool.query(
-            `UPDATE staff SET ${field}=($1) WHERE id=$2`,
-            [request.body[field], id],
-            (err, res) => {
-                if (err) return next(err);
-                if (index === fields.length -1) response.redirect('/staff');
-            }
-        )
-    });
+router.put('/appointmentsTrue/:id', (request, response, next) => {
+    const { id } = request.params;
+    pool.query(
+        `UPDATE staff SET appt_only = true WHERE id=$1`,
+        [id],
+        (err, res) => {
+            if (err) return next(err);
+            console.log(err);
+            response.status(201).json({
+                message: 'Successfully updated to true',
+            })
+        }
+    )
 });
 
 module.exports = router;
