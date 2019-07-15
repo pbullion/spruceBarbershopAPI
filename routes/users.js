@@ -27,9 +27,9 @@ router.get('/email/:email', (request, response, next) => {
     });
 });
 
-router.get('/phone/:phone', (request, response, next) => {
-    const { phone } = request.params;
-    pool.query('SELECT * FROM users WHERE phone = $1', [phone], (err, res) => {
+router.get('/phone_number/:phone_number', (request, response, next) => {
+    const { phone_number } = request.params;
+    pool.query('SELECT * FROM users WHERE phone_number = $1', [phone_number], (err, res) => {
         if (err) return next(err);
         response.json(res.rows);
     });
@@ -64,19 +64,19 @@ router.post('/', (request, response, next) => {
 });
 
 router.post('/store-signup', (request, response, next) => {
-    const { first_name, last_name, phone } = request.body;
-    pool.query('SELECT * FROM users WHERE phone = $1', [phone], (err, res) => {
+    const { first_name, last_name, phone_number } = request.body;
+    pool.query('SELECT * FROM users WHERE phone_number = $1', [phone_number], (err, res) => {
         if (err) return next(err);
         console.log("here is the length", res.rows.length);
         if (res.rows.length > 0) {
-            response.redirect(`/users/phone/${phone}`);
+            response.redirect(`/users/phone_number/${phone_number}`);
         } else {
             pool.query(
-                'INSERT INTO users(first_name, last_name, phone, customer) VALUES($1, $2, $3, $4)',
-                [first_name, last_name, phone, true],
+                'INSERT INTO users(first_name, last_name, phone_number, customer) VALUES($1, $2, $3, $4)',
+                [first_name, last_name, phone_number, true],
                 (err, res) => {
                     if (err) return next(err);
-                    response.redirect(`/users/phone/${phone}`);
+                    response.redirect(`/users/phone_number/${phone_number}`);
                 }
             );
         }
