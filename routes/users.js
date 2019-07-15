@@ -27,6 +27,14 @@ router.get('/email/:email', (request, response, next) => {
     });
 });
 
+router.get('/phone/:phone', (request, response, next) => {
+    const { phone } = request.params;
+    pool.query('SELECT * FROM users WHERE phone = $1', [phone], (err, res) => {
+        if (err) return next(err);
+        response.json(res.rows);
+    });
+});
+
 router.delete('/:id', (request, response, next) => {
     const { id } = request.params;
     pool.query('DELETE FROM users WHERE id = $1', [id], (err, res) => {
@@ -49,6 +57,26 @@ router.post('/', (request, response, next) => {
                 (err, res) => {
                     if (err) return next(err);
                     response.redirect(`/users/email/${email}`);
+                }
+            );
+        }
+    });
+});
+
+router.post('/store-signup', (request, response, next) => {
+    const { first_name, last_name, phone } = request.body;
+    pool.query('SELECT * FROM users WHERE phone = $1', [phone], (err, res) => {
+        if (err) return next(err);
+        console.log("here is the length", res.rows.length);
+        if (res.rows.length > 0) {
+            response.redirect(`/users/phone/${phone}`);
+        } else {
+            pool.query(
+                'INSERT INTO users(first_name, last_name, phone, customer) VALUES($1, $2, $3, $4)',
+                [first_name, last_name, phone, true],
+                (err, res) => {
+                    if (err) return next(err);
+                    response.redirect(`/users/phone/${phone}`);
                 }
             );
         }
