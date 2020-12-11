@@ -2,13 +2,13 @@
 
 export PGPASSWORD='Gj5ZQ8P7$!L*qy9!~AMT#E8J6q<(@d'
 
-database="spruceBarbershopDB"
+database="coverClubDB"
 
 echo "Configuring database: $database"
 
-dropdb -U spruce_admin spruceBarbershopDB
-createdb -U spruce_admin spruceBarbershopDB
+dropdb -U spruce_admin coverClubDB
+createdb -U spruce_admin coverClubDB
 
-psql -U spruce_admin spruceBarbershopDB < ./bin/sql/spruceBarbershopDB.sql
+psql -U spruce_admin coverClubDB < ./bin/sql/coverClubDB.sql
 
 echo "$database configured"
